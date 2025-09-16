@@ -15,7 +15,9 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import Ionicons from '@expo/vector-icons/Ionicons';
+import { uploadToCloudinary } from '../lib/cloudinary';
+import { CameraIcon } from 'react-native-heroicons/outline';
+
 
 export default function Camera() {
   const [facing, setFacing] = useState<CameraType>('back');
@@ -41,23 +43,26 @@ export default function Camera() {
   }
 
   async function takePhoto() {
-    console.log("Image captured")
     const photo = await camera.current?.takePictureAsync()
 
-    console.log(JSON.stringify(photo, null, 2))
+    if(!photo?.uri) return;
+    
+    const cloudinaryResponse = await uploadToCloudinary(photo.uri)
+
+    console.log(JSON.stringify(cloudinaryResponse, null, 2))
   }
 
   return (
     <View style={styles.container}>
       <CameraView ref={camera} style={styles.camera} facing={facing}>
         <View 
-          className='absolute bottom-0 bg-neutral-900/20 h-10 w-full'
+          className='absolute bottom-0 bg-neutral-900/20 h-10 w-full p-2'
         >
-          <Ionicons
-            name="camera-reverse-outline" 
+          <CameraIcon
             size={24} 
             color={'white'}
             onPress={toggleCameraFacing}
+            className="ml-2"
           />
         </View>
       </CameraView>
