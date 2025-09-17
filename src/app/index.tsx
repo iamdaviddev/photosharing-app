@@ -1,15 +1,13 @@
 import { supabase } from "@/lib/supabase";
+import { useAuth } from "@/providers/authProvider";
 import { Link } from "expo-router";
 import { useEffect } from "react";
 import { Text, View } from "react-native";
 
 export default function Home() {
-  useEffect(()=> {
-    supabase
-      .from('events')
-      .select('*, assets(*)')
-      .then((data) => console.log(JSON.stringify(data, null, 2)))
-  }, [])
+  const { isAuthenticated, user } = useAuth()
+
+  console.log(isAuthenticated, user)
 
   return(
     <View className="flex-1 justify-center items-center gap-4">
