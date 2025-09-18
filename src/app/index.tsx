@@ -11,7 +11,7 @@ export default function Home() {
   })
 
   if(isLoading){
-    return <ActivityIndicator/>
+    return <ActivityIndicator className="flex-1 items-center justify-center"/>
   }
 
   if(error){

@@ -15,13 +15,26 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { uploadToCloudinary } from '../lib/cloudinary';
+import { uploadToCloudinary } from '../../../lib/cloudinary';
 import { CameraIcon } from 'react-native-heroicons/outline';
+import { useLocalSearchParams } from 'expo-router';
+import { useMutation } from '@tanstack/react-query';
+import { insertAsset } from '@/services/assets';
+import { useAuth } from '@/providers/AuthProvider';
 
 
 export default function Camera() {
   const [facing, setFacing] = useState<CameraType>('back');
   const [permission, requestPermission] = useCameraPermissions();
+
+  const { id } = useLocalSearchParams<{ id: string }>()
+  const { user } = useAuth()
+
+  const inserAssetMutation = useMutation({
+    mutationFn: (assetId: string) => 
+      insertAsset({ event_id: id, user_id: user?.id, asset_id: assetId })
+  }) 
+
 
   const camera = useRef<CameraView>(null)
 
@@ -50,16 +63,18 @@ export default function Camera() {
     const cloudinaryResponse = await uploadToCloudinary(photo.uri)
 
     console.log(JSON.stringify(cloudinaryResponse, null, 2))
+
+    inserAssetMutation.mutate(cloudinaryResponse.public_id)
   }
 
   return (
     <View style={styles.container}>
       <CameraView ref={camera} style={styles.camera} facing={facing}>
         <View 
-          className='absolute bottom-0 bg-neutral-900/20 h-10 w-full p-2'
+          className='absolute bottom-0 h-10 w-full p-2'
         >
           <CameraIcon
-            size={24} 
+            size={26} 
             color={'white'}
             onPress={toggleCameraFacing}
             className="ml-2"
