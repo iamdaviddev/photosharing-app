@@ -15,7 +15,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { uploadToCloudinary } from '../../../lib/cloudinary';
+import { uploadToCloudinary } from '@/lib/cloudinary';
 import { CameraIcon } from 'react-native-heroicons/outline';
 import { useLocalSearchParams } from 'expo-router';
 import { useMutation, useQueryClient } from '@tanstack/react-query';

@@ -1,11 +1,13 @@
 import EventListItem from "@/components/event-list-item";
 import { getEvents } from "@/services/events";
 import { useQuery } from "@tanstack/react-query";
-import { ActivityIndicator, Text, View, FlatList } from "react-native";
+import { Link } from "expo-router";
+import { ActivityIndicator, Text, View, FlatList, Pressable } from "react-native";
+import { PlusIcon } from "react-native-heroicons/outline";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Home() {
-  const { data, isLoading, error, isRefetching, refetch } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ['events'],
     queryFn: getEvents,
   })
@@ -26,8 +28,14 @@ export default function Home() {
         renderItem={({ item })=> <EventListItem event={item}/>}
         contentInsetAdjustmentBehavior="automatic"
         className="mt-14"
-        refreshing={isRefetching}
-        onRefresh={refetch}
+        ListHeaderComponent={()=> (
+          <Link href='/events/create' asChild>
+            <Pressable className="bg-purple-600 p-4 rounded-lg flex-row items-center justify-center gap-2">
+              <PlusIcon size={24} color={'white'}/>
+              <Text className="text-white text-lg font-semibold">Create event</Text>
+            </Pressable>
+          </Link>
+        )}
       />
     </SafeAreaView>
   )

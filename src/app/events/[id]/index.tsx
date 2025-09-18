@@ -16,13 +16,13 @@ import AssetItem from "@/components/asset-item";
 
 import { useQuery } from "@tanstack/react-query";
 import { getEvent } from "@/services/events";
-import { SafeAreaView } from "react-native-safe-area-context";
+
 import { CameraIcon } from "react-native-heroicons/outline";
 
 export default function EventDetails() {
   const { id } = useLocalSearchParams<{ id: string }>()
   
-  const { data: event, isLoading, error } = useQuery({
+  const { data: event, isLoading, error, isRefetching, refetch } = useQuery({
     queryKey: ['events', id],
     queryFn: () => getEvent(id)
   })
@@ -51,11 +51,13 @@ export default function EventDetails() {
         contentContainerClassName="gap-1 p-4"
         columnWrapperClassName="gap-4"
         renderItem={({ item }) => <AssetItem asset={item}/>}
+        refreshing={isRefetching}
+        onRefresh={refetch}
       />
 
       <Link href={`/events/${id}/camera`} asChild>
-        <Pressable className="absolute bottom-12 right-4 flex-row items-center justify-center bg-white p-4 rounded-full">
-          <CameraIcon size={28} color={'black'}/>
+        <Pressable className="absolute bottom-12 right-4 flex-row items-center justify-center bg-purple-600 p-4 rounded-full">
+          <CameraIcon size={28} color={'white'}/>
         </Pressable>
       </Link>
     </>
