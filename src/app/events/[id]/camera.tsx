@@ -18,7 +18,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { uploadToCloudinary } from '../../../lib/cloudinary';
 import { CameraIcon } from 'react-native-heroicons/outline';
 import { useLocalSearchParams } from 'expo-router';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { insertAsset } from '@/services/assets';
 import { useAuth } from '@/providers/AuthProvider';
 
@@ -29,10 +29,14 @@ export default function Camera() {
 
   const { id } = useLocalSearchParams<{ id: string }>()
   const { user } = useAuth()
+  const queryClient = useQueryClient()
 
   const inserAssetMutation = useMutation({
     mutationFn: (assetId: string) => 
-      insertAsset({ event_id: id, user_id: user?.id, asset_id: assetId })
+      insertAsset({ event_id: id, user_id: user?.id, asset_id: assetId }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['events', id] })
+    }
   }) 
 
 
