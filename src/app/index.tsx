@@ -5,7 +5,7 @@ import { ActivityIndicator, Text, View, FlatList } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Home() {
-  const { data, isLoading, error } = useQuery({
+  const { data, isLoading, error, isRefetching, refetch } = useQuery({
     queryKey: ['events'],
     queryFn: getEvents,
   })
@@ -26,6 +26,8 @@ export default function Home() {
         renderItem={({ item })=> <EventListItem event={item}/>}
         contentInsetAdjustmentBehavior="automatic"
         className="mt-14"
+        refreshing={isRefetching}
+        onRefresh={refetch}
       />
     </SafeAreaView>
   )
