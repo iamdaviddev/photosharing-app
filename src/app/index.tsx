@@ -1,15 +1,13 @@
-import EventListItem from "@/components/event-list-item";
-import { getEvents } from "@/services/events";
-import { useQuery } from "@tanstack/react-query";
-import { ActivityIndicator, Text, View, FlatList } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { supabase } from "@/lib/supabase";
+import { useAuth } from "@/providers/authProvider";
+import { Link } from "expo-router";
+import { useEffect } from "react";
+import { Text, View } from "react-native";
 
 export default function Home() {
-  const { data, isLoading, error } = useQuery({
-    queryKey: ['events'],
-    queryFn: getEvents,
-  })
+  const { isAuthenticated, user } = useAuth()
 
+<<<<<<< HEAD
   if(isLoading){
     return <ActivityIndicator className="flex-1 items-center justify-center"/>
   }
@@ -17,16 +15,19 @@ export default function Home() {
   if(error){
     return <Text>Error: {error.message}</Text>
   }
+=======
+  console.log(isAuthenticated, user)
+>>>>>>> fe64b31a27751ae378d810bfd00495d77c9c2d56
 
   return(
-    <SafeAreaView className="flex-1">
-      <FlatList 
-        data={data}
-        contentContainerClassName="gap-4 p-4"
-        renderItem={({ item })=> <EventListItem event={item}/>}
-        contentInsetAdjustmentBehavior="automatic"
-        className="mt-14"
-      />
-    </SafeAreaView>
+    <View className="flex-1 justify-center items-center gap-4">
+      <Link href="/camera" className="font-bold text-white">
+        Open Camera
+      </Link>
+
+      <Link href="/event" className="font-bold text-white">
+        Event details
+      </Link>
+    </View>
   )
 }
