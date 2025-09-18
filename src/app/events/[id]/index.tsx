@@ -17,7 +17,7 @@ import AssetItem from "@/components/asset-item";
 import { useQuery } from "@tanstack/react-query";
 import { getEvent } from "@/services/events";
 
-import { CameraIcon } from "react-native-heroicons/outline";
+import { ArrowTopRightOnSquareIcon, CameraIcon } from "react-native-heroicons/outline";
 
 export default function EventDetails() {
   const { id } = useLocalSearchParams<{ id: string }>()
@@ -41,15 +41,20 @@ export default function EventDetails() {
     <>
       <Stack.Screen 
         options={{ 
-          title: event.name 
+          title: event.name,
+          headerRight: () => (
+            <Link href={`/events/${id}/invite`} asChild>
+              <ArrowTopRightOnSquareIcon size={24} color={'white'}/>
+            </Link>
+          )
         }} 
       />
 
       <FlatList
         data={event.assets}
         numColumns={2}
-        contentContainerClassName="gap-1 p-4"
-        columnWrapperClassName="gap-4"
+        contentContainerClassName="gap-2 p-2"
+        columnWrapperClassName="gap-2"
         renderItem={({ item }) => <AssetItem asset={item}/>}
         refreshing={isRefetching}
         onRefresh={refetch}

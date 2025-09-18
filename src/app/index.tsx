@@ -1,5 +1,6 @@
 import EventListItem from "@/components/event-list-item";
-import { getEvents } from "@/services/events";
+import { useAuth } from "@/providers/AuthProvider";
+import { getEvents, getEventsForUser } from "@/services/events";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "expo-router";
 import { ActivityIndicator, Text, View, FlatList, Pressable } from "react-native";
@@ -7,9 +8,10 @@ import { PlusIcon } from "react-native-heroicons/outline";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Home() {
+  const { user } = useAuth()
   const { data, isLoading, error } = useQuery({
     queryKey: ['events'],
-    queryFn: getEvents,
+    queryFn: () => getEventsForUser(user!.id),
   })
 
   if(isLoading){

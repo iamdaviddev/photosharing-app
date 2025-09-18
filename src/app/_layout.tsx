@@ -48,6 +48,23 @@ export default function RootLayout() {
           />
 
           <Stack.Screen
+            name="events/[id]/invite"
+            options={{ 
+              title: "Invite",
+              presentation: 'modal',
+              headerTransparent: true
+            }}
+          />
+
+          <Stack.Screen
+            name="events/[id]/join"
+            options={{ 
+              title: "Join event",
+              presentation: 'modal',
+            }}
+          />
+
+          <Stack.Screen
             name="events/create"
             options={{ 
               title: "Create event",
